@@ -28,9 +28,12 @@ body {
     radial-gradient(circle at 80% 20%, rgba(46, 204, 113, 0.05) 0%, transparent 40%),
     linear-gradient(135deg, var(--bg), var(--bg-dark));
   min-height: 100vh;
+  height: 100vh;
   color: var(--text);
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 body::before {
@@ -315,8 +318,10 @@ button:disabled {
 .app-container {
   display: flex;
   min-height: 100vh;
+  height: 100vh;
   position: relative;
   z-index: 1;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -446,6 +451,10 @@ button:disabled {
   margin-left: 280px;
   padding: 30px;
   position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  height: 100vh;
 }
 
 .menu-toggle {
@@ -1071,8 +1080,27 @@ button:disabled {
 }
 
 @media (max-width: 900px) {
+  .login-container {
+    padding: 15px;
+  }
+
+  .login-card {
+    padding: 30px 25px;
+    border-radius: 24px;
+  }
+
+  .logo {
+    width: 110px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
   .sidebar {
     transform: translateX(-100%);
+    width: 300px;
+    max-width: 85vw;
   }
 
   .sidebar.open {
@@ -1081,12 +1109,316 @@ button:disabled {
 
   .main-content {
     margin-left: 0;
-    padding: 80px 20px 30px;
+    padding: 80px 15px 30px;
+    overflow-x: hidden;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .app-container {
+    overflow: hidden;
   }
 
   .menu-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .sidebar-nav {
+    padding: 15px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(39, 174, 96, 0.3) transparent;
+  }
+
+  .sidebar-nav::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(39, 174, 96, 0.3);
+    border-radius: 3px;
+  }
+
+  .nav-item {
+    padding: 12px 15px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+  }
+
+  .sidebar-user {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .container {
+    padding: 15px 0;
+  }
+
+  .page-header {
+    margin-bottom: 25px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .stat-card, .menu-item {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .votacao-card {
+    padding: 18px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    border-radius: 16px;
+  }
+
+  .votar-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal {
+    padding: 15px;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    padding: 25px 20px;
+  }
+
+  .modal-header {
+    margin-bottom: 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group input, .form-group select {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+
+  .form-btn {
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+
+  .timeline {
+    padding-left: 25px;
+  }
+
+  .timeline-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .homenageados-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .homenageado-card {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+
+  .list-group {
+    gap: 12px;
+  }
+
+  .list-item {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    border-radius: 16px;
+  }
+
+  table {
+    font-size: 13px;
+    min-width: 600px;
+  }
+
+  th, td {
+    padding: 12px 10px;
+  }
+
+  .action-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  .alertas-list {
+    gap: 12px;
+  }
+
+  .alerta-item {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .secao-duvidas {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .secao-duvidas h2 {
+    font-size: 20px;
+  }
+
+  .secao-duvidas ul li {
+    font-size: 14px;
+  }
+
+  .subsecao {
+    margin-top: 18px;
+    padding-top: 18px;
+  }
+
+  .subsecao h3 {
+    font-size: 17px;
+  }
+
+  .info-box {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .info-card h4 {
+    font-size: 15px;
+  }
+
+  .info-card p {
+    font-size: 13px;
+  }
+
+  .traje-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .traje-item {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .config-section {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .config-section h3 {
+    font-size: 18px;
+  }
+
+  .config-item {
+    padding: 15px 0;
+  }
+
+  .config-item h4 {
+    font-size: 15px;
+  }
+
+  .config-switch {
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 500px) {
+  .sidebar {
+    width: 280px;
+    max-width: 90vw;
+  }
+
+  .header {
+    padding: 12px 15px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+  }
+
+  .menu-toggle {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .sidebar-header {
+    padding: 25px 20px;
+  }
+
+  .sidebar-logo {
+    width: 70px;
+  }
+
+  .sidebar-header h2 {
+    font-size: 15px;
+  }
+
+  .sidebar-user-name {
+    font-size: 14px;
+  }
+
+  .sidebar-user-role {
+    font-size: 12px;
+  }
+
+  .logout-btn {
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .stat-card-value {
+    font-size: 26px;
+  }
+
+  .stat-card-label {
+    font-size: 13px;
   }
 }

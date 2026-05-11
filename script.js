@@ -61,6 +61,22 @@ const explicacoesCategorias = {
 
 async function initApp() {
   initSupabase();
+  console.log('Iniciando app...');
+  
+  const savedUser = localStorage.getItem('formaturaUser');
+  console.log('Usuário salvo:', savedUser);
+  
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      currentPage = 'home';
+      await carregarDados();
+    } catch (e) {
+      console.error('Erro ao carregar usuário salvo:', e);
+      localStorage.removeItem('formaturaUser');
+    }
+  }
+  
   renderApp();
   lucide.createIcons();
 }
@@ -1766,6 +1782,7 @@ async function handleLogin() {
         nome: user.nome,
         admin: user.admin
       };
+      localStorage.setItem('formaturaUser', JSON.stringify(currentUser));
       currentPage = 'home';
       await carregarDados();
       renderApp();
@@ -1787,6 +1804,7 @@ async function handleLogin() {
 
 function handleLogout() {
   currentUser = null;
+  localStorage.removeItem('formaturaUser');
   currentPage = 'login';
   config = {
     votacao_ativa: 'SIM',

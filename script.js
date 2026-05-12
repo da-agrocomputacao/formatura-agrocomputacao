@@ -63,6 +63,15 @@ async function initApp() {
   initSupabase();
   console.log('Iniciando app...');
   
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('./service-worker.js');
+      console.log('Service Worker registrado com sucesso:', registration);
+    } catch (error) {
+      console.error('Erro ao registrar Service Worker:', error);
+    }
+  }
+  
   const savedUser = localStorage.getItem('formaturaUser');
   console.log('Usuário salvo:', savedUser);
   

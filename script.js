@@ -1,3 +1,4 @@
+const APP_VERSION = '2.0';
 const SUPABASE_URL = 'https://lomidyqleidipggrpkcv.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxvbWlkeXFsZWlkaXBnZ3Jwa2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTg4MDYsImV4cCI6MjA5NDA5NDgwNn0.v9HWY6qiFxOgnS3YczF3lgiS20AdL_fB288fgNgOOCw';
 
@@ -8,6 +9,20 @@ function initSupabase() {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   }
   return supabaseClient;
+}
+
+function verificarVersao() {
+  const versaoSalva = localStorage.getItem('appVersion');
+  if (versaoSalva !== APP_VERSION) {
+    localStorage.setItem('appVersion', APP_VERSION);
+    if (versaoSalva) {
+      setTimeout(() => {
+        if (confirm('Nova versão disponível! Clique em OK para atualizar o sistema.')) {
+          window.location.reload(true);
+        }
+      }, 500);
+    }
+  }
 }
 
 let currentUser = null;
@@ -61,6 +76,7 @@ const explicacoesCategorias = {
 
 async function initApp() {
   initSupabase();
+  verificarVersao();
   console.log('Iniciando app...');
   
   if ('serviceWorker' in navigator) {

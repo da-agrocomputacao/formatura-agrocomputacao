@@ -269,7 +269,9 @@ function isAdmin() {
 }
 
 function getOpcoesPorCategoria(categoria) {
-  console.log('getOpcoesPorCategoria - Categoria:', categoria);
+  console.log('=== getOpcoesPorCategoria ===');
+  console.log('Categoria:', categoria);
+  console.log('votosDoAluno:', votosDoAluno);
   
   const mapCategoriaParaAba = {
     'Paraninfo': professores,
@@ -283,21 +285,24 @@ function getOpcoesPorCategoria(categoria) {
   };
   
   let dados = mapCategoriaParaAba[categoria] || [];
-  console.log('Dados originais para categoria:', dados);
+  console.log('Dados originais:', dados);
   
   if (['Orador', 'Juramentista', 'Mensagem aos Pais'].includes(categoria)) {
     dados = dados.filter(item => item.nome !== 'Administrador');
+    console.log('Dados após remover Administrador:', dados);
   }
   
   const categoriasProfessor = ['Paraninfo', 'Patrono', 'Nome da Turma', 'Professor Homenageado'];
   if (categoriasProfessor.includes(categoria)) {
-    const votosDoAlunoAtual = votosDoAluno.filter(voto => voto.categoria !== categoria);
-    const professoresJaVotados = votosDoAlunoAtual.map(voto => voto.voto);
-    dados = dados.filter(item => !professoresJaVotados.includes(item.nome));
+    const outrasCategoriasVotadas = votosDoAluno.filter(voto => voto.categoria !== categoria);
+    const nomesProfessoresJaVotados = outrasCategoriasVotadas.map(voto => voto.voto);
+    console.log('Professores já votados em outras categorias:', nomesProfessoresJaVotados);
+    dados = dados.filter(item => !nomesProfessoresJaVotados.includes(item.nome));
+    console.log('Dados após filtrar professores já votados:', dados);
   }
   
   const opcoes = dados.map(item => item.nome);
-  console.log('Opções geradas:', opcoes);
+  console.log('Opções finais:', opcoes);
   
   return opcoes;
 }
@@ -1737,25 +1742,9 @@ async function confirmarVoto(categoria) {
   const res = await upsertVoto(votoData);
   
   if (res.success) {
-    const votosAluno = await fetchSupabase('votacoes', { aluno: currentUser.nome });
-    votosDoAluno = votosAluno.data || [];
     mostrarAlerta('Sucesso!', 'Voto registrado com sucesso!', 'success');
     
-    const votoExistenteIndex = votosDoAluno.findIndex(v => v.categoria === categoria);
-    if (votoExistenteIndex >= 0) {
-      votosDoAluno[votoExistenteIndex].voto = votoSelecionado;
-    } else {
-      votosDoAluno.push({ aluno: currentUser.nome, categoria, voto: votoSelecionado });
-    }
-    
-    if (config.resultado_ao_vivo === 'SIM') {
-      resultados = await calcularResultados();
-    }
-    
-    if (isAdmin()) {
-      const todosVotosRes = await fetchSupabase('votacoes');
-      if (todosVotosRes.success) todosOsVotos = todosVotosRes.data || [];
-    }
+    await carregarDados();
     
     fecharModal();
   } else {

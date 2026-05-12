@@ -282,8 +282,19 @@ function getOpcoesPorCategoria(categoria) {
     'Mensagem aos Pais': alunos
   };
   
-  const dados = mapCategoriaParaAba[categoria] || [];
-  console.log('Dados para categoria:', dados);
+  let dados = mapCategoriaParaAba[categoria] || [];
+  console.log('Dados originais para categoria:', dados);
+  
+  if (['Orador', 'Juramentista', 'Mensagem aos Pais'].includes(categoria)) {
+    dados = dados.filter(item => item.nome !== 'Administrador');
+  }
+  
+  const categoriasProfessor = ['Paraninfo', 'Patrono', 'Nome da Turma', 'Professor Homenageado'];
+  if (categoriasProfessor.includes(categoria)) {
+    const votosDoAlunoAtual = votosDoAluno.filter(voto => voto.categoria !== categoria);
+    const professoresJaVotados = votosDoAlunoAtual.map(voto => voto.voto);
+    dados = dados.filter(item => !professoresJaVotados.includes(item.nome));
+  }
   
   const opcoes = dados.map(item => item.nome);
   console.log('Opções geradas:', opcoes);
@@ -1726,6 +1737,8 @@ async function confirmarVoto(categoria) {
   const res = await upsertVoto(votoData);
   
   if (res.success) {
+    const votosAluno = await fetchSupabase('votacoes', { aluno: currentUser.nome });
+    votosDoAluno = votosAluno.data || [];
     mostrarAlerta('Sucesso!', 'Voto registrado com sucesso!', 'success');
     
     const votoExistenteIndex = votosDoAluno.findIndex(v => v.categoria === categoria);

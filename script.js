@@ -1217,10 +1217,19 @@ function renderAdminRelatoriosPage() {
   });
   
   return `
-    <div class="page-content">
+    <div class="page-content" id="relatorios-page">
       <div class="page-header">
         <h1>Relatórios</h1>
         <p>Dados e estatísticas das votações</p>
+      </div>
+      
+      <div style="display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap;">
+        <button class="btn-primary" style="width:auto;" onclick="imprimirRelatorios()">
+          <i data-lucide="printer" style="width:18px;height:18px;"></i> Imprimir
+        </button>
+        <button class="btn-primary" style="width:auto;" onclick="compartilharWhatsApp()">
+          <i data-lucide="message-circle" style="width:18px;height:18px;"></i> Compartilhar WhatsApp
+        </button>
       </div>
       
       <div class="cards-grid" style="margin-bottom:30px;">
@@ -1244,7 +1253,7 @@ function renderAdminRelatoriosPage() {
         </div>
       </div>
       
-      <div class="documento-card">
+      <div class="documento-card" style="margin-bottom:30px;">
         <h3 style="margin-bottom:20px;">Votos por Categoria</h3>
         ${Object.entries(votosPorCategoria).length > 0 ? `
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;">
@@ -1259,8 +1268,50 @@ function renderAdminRelatoriosPage() {
           <p style="color:var(--text-light);text-align:center;padding:40px;">Nenhum dado para exibir.</p>
         `}
       </div>
+      
+      <div class="documento-card">
+        <h3 style="margin-bottom:20px;">Resultados Finais</h3>
+        ${resultados.length > 0 ? `
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px;">
+            ${resultados.map(res => `
+              <div style="padding:20px;background:rgba(39,174,96,0.08);border-radius:16px;border:1px solid rgba(39,174,96,0.2);text-align:center;">
+                <p style="color:var(--text-light);font-size:13px;margin-bottom:10px;">${res.cargo}</p>
+                <p style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:5px;">${res.nome}</p>
+                <p style="color:var(--text-light);font-size:14px;">${res.votos} votos</p>
+              </div>
+            `).join('')}
+          </div>
+        ` : `
+          <p style="color:var(--text-light);text-align:center;padding:40px;">Aguardando resultados...</p>
+        `}
+      </div>
     </div>
   `;
+}
+
+function imprimirRelatorios() {
+  window.print();
+}
+
+function compartilharWhatsApp() {
+  let texto = '*Resultados da Votação - Agrocomputação FAZU 2026*\n\n';
+  
+  if (resultados.length > 0) {
+    texto += 'Resultados Finais:\n';
+    resultados.forEach(res => {
+      texto += `• ${res.cargo}: ${res.nome} (${res.votos} votos)\n`;
+    });
+  }
+  
+  texto += '\n*Convite aos Homenageados*\n\n';
+  texto += 'Prezado(a),\n\n';
+  texto += 'É com grande satisfação que informamos que você foi escolhido(a) pela turma de Agrocomputação FAZU 2026 para ser nosso(a) homenageado(a) na colação de grau!\n\n';
+  texto += 'Por favor, entre em contato com a comissão de formatura para mais informações.\n\n';
+  texto += 'Atenciosamente,\n';
+  texto += 'Turma de Agrocomputação FAZU 2026';
+  
+  const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank');
 }
 
 function renderAdminUsuariosPage() {
